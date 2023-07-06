@@ -18,6 +18,33 @@ TouchableWithoutFeedback : 화면의 가장 위에서 일어나는 이벤트 확
 pressable : 인터페이스 변화 없음, 다만 새로 나온 거라 속성 많음. 찾아보기
     hitslope : 요소 바깥 어디까지 클릭을 감지할지 정함. pressable에만 사용 가능
 
+working 변수를 true, false로 바꾸는 work, travel 함수를 만들어
+    TouchableOpacity 안의 prop으로써 onpress={함수이름} 넣어 working 바꾸도록 함
+    스타일에 삼항 의문문 넣기 위해 중괄호 이중으로 치고 (js 사용하기 위함)
+    working에 따라 color 바꿔줌
+
+<TextInput>
+유저가 글 쓸 수 있는 유일한 컴포넌트 : TextInput
+keyboardType : 숫자패드, 이메일 등 특수한 키보드 보여줌
+returnKeyType ; return 키패드의 모양을 바꿀 수 있음
+react는 컴포넌트, state, prop의 조합으로 어떤 플랫폼에도 접근할 수 있음
+secureTextEntry : 비밀번호처럼 내용 숨김
+multiline : 한 줄 이상 쓰는 경우 엔터가 전송이 아닌 줄넘기기가 됨
+    이걸 안 쓰고 쓰면 한 줄로만 써짐
+onChangeText : TextInput의 변화 감지 - onChangeText={함수} 형식으로 prop 넣고
+    함수에서 event 받아서 사용하면 됨
+autoCapitalize : 첫글자 대문자, 전체 대문자 등 기능 제공
+onSubmitEditing : submut 버튼 누를 시 감지
+    submit 이후 내용 사용하려면 TextInput에 prop으로 value={text} 넣고 text로 사용해야 함
+    이유는 onChangeText에서 text에 내용 저장하고 있었기 때문
+useState로 toDo 담을 변수 만들기 -> array로 만들어도 되지만 object {} 로 만들어서 해쉬맵처럼 쓰기
+    이렇게 하면 각 toDo에 아이디, 상태 등등을 넣을 수 있음
+Object assign : object를 다른 object와 합쳐 새로운 object를 리턴해줌
+    사용자가 여러 개 입력 시 오브젝트로 합치기 위해 사용
+    Object.assign({}, toDos, {[Date.now()]:{text, work:working}})
+    첫번째 {} (빈 오브젝트)에 새로운 오브젝트가 생성됨
+    text는 텍스트 변수, work는 work인지 todo인지 확인용 인자
+
 Object.assign 대체할 방법 : const newToDos = {...toDos, [Date.now()] : {text, working}}
 Object.keys(object) : object의 key들의 array 보여줌 -> map 사용 가능
     Object.keys(toDos).map(key => 컴포넌트) 형식
@@ -55,5 +82,53 @@ async, await 안 써도 상관은 없음 -> 먼저 진행시키고 나중에 저
 
 <Challenge>
 1. 어플리케이션 재시작시 이전에 work, travel 중 어디 있었는지 기억하고 거기서 시작시키기
+    해결 : await AsyncStorage 사용하여 working 저장 후 꺼내기 - key만 정해놓고 씀
+    travel과 work 함수에서 setitem하고
+    load하는 함수 따로 만들어서 (loadWorking) useEffect에서 getitem하기
 2. toDo 완료 아이콘 만들고 동작 만들기
+    해결 : 아이콘은 삭제 아이콘 만든 것과 동일한 방식으로 하면 됨
+    toDo 오브젝트에 done element 추가 - 기본값 false,
+    완료 아이콘 누르면 true로 바뀌는 doneToDo 함수 만들기
+    완료 여부에 따라 map 나누어서 시각적 효과 주기
 3. 텍스트 수정 아이콘 만들고 기능 만들기 
+    toDo 오브젝트에 edit element 추가 - 기본값 false,
+    원래 할 일 컴포넌트 들어가는 곳에 삼항 조건문 넣어 edit이 false인 경우 원래대로,
+    true인 경우 TextInput이 나오도록 함.
+    이 인풋의 onChangeText에는 onChangeEditText 함수를 새로 만들어
+    새로 만든 editText에 입력한 텍스트가 들어가도록 함.
+    onSubmitEditing에는 editFinish 함수를 새로 만들어,
+    newToDos에서 해당 key 가진 element의 edit은 false로 다시 바꾸고, 텍스트도 editText로 바꿔준다.
+    또한 exitText는 ""로 초기화시킨다.
+
+<Publish>
+터미널에 expo publish 하면 프로젝트가 공개됨
+    코드가 expo 웹사이트로 보내짐 - 다른 사람과 코드 공유 가능
+expo가 react native web이라는 프로젝트와 통합되어 있기 때문에 web에서도 사용 가능
+    web에서 react native 사용하기 위해 만들어짐
+    ex. View가 div으로 바뀜
+        사실상 RN 사용시 iOS, OS, web 모두 사용 가능
+이후의 내용은 expo의 web UI 지원 종료로 인해 강의 내용과 바뀜
+    - nomadcoders 사이트의 댓글 보고 진행함
+    https://nomadcoders.co/react-native-for-beginners/lectures/3139
+이후 코드 바꾸고 업데이트 하고 싶을 때 : eas update 하면 됨
+
+웹에서의 문제 : Alert가 없음
+    Platform API 사용 - 현재 어떤 플랫폼인지 알 수 있음
+    react-native에서 Platform import
+    confirm : 브라우저 API - 유저에게 메시지 보여주고 컨펌 여부를 t/f로 알려줌
+
+splash : 앱이 로딩되기 전에 나오는 화면
+    원하는 사진 넣고 app.json에서 조절하면 됨
+favicon : 웹에서 사용할 아이콘
+adaptive-icon : 안드로이드에서 사용하는 아이콘
+app.json : 어플을 내맘대로 만들기 위해 편집해야 하는 파일
+    https://docs.expo.dev/versions/latest/config/app/ 에서 사용 가능한 설정 모두 볼 수 있음
+
+<App Store>
+앱스토어 99달러, 안드로이드 25달러 내야 앱 낼 수 있음, 과정도 많고 스샷도 있어야 함
+먼저 build부터 해야 함 - expo CLI가 다 해줌, iOS 앱을 윈도우에서 만들 수 있음
+build는 컴퓨터가 아닌 expo 서버에서 이루어짐
+웹사이트 게시의 경우 gh-pages 이용함
+npm i gh-pages로 설치,
+package.json의 scripts에 "deploy": "gh-pages -d web-build",
+    "predeploy": "expo build:web" 작성
