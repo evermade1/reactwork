@@ -132,3 +132,28 @@ build는 컴퓨터가 아닌 expo 서버에서 이루어짐
 npm i gh-pages로 설치,
 package.json의 scripts에 "deploy": "gh-pages -d web-build",
     "predeploy": "expo build:web" 작성
+
+github에서 컴퓨터로 폴더 가져오기 : git clone repositoryurl 폴더이름 하면 끝
+
+<expo의 단점>
+앱 설정에 관해서 많은 설정을 할 수 없음
+    근본적인 파일에 접근 불가하기 때문 - js에만 접근 가능, app.json 통해 앱 설정 가능
+        이것 때문에 계약 파기될 수도 있음
+        개발자는 js 코드만 쓸 수 있음
+        근본적인 파일에 접근해야 하는 경우 : 블루투스 
+    대부분의 앱은 expo SDK 이용하여 만들 수 있음
+        expo install 이름 하면 뭐든 설치해서 사용 가능
+
+무거움 - 예시로 만든 workhard 앱도 60메가나 됨
+    SDK를 디폴트로 포함하기 때문 - 쓰지 않아도 Facebook SDK를 디폴트로 포함
+    줄일 수 없음
+
+따라서 expo의 사용은 설정의 자유 vs 모든 걸 맡기는 편안함 사이의 trade-off
+eject 커맨드 : scripts -> "eject": 'expo eject"
+    실행 시 expo에서 꺼내줌
+
+대안 : create react native app
+    create-react-app과 동일, native 버전, 몇 가지 설정 필요
+
+
+    
